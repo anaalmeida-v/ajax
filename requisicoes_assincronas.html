@@ -14,20 +14,33 @@
     />
     <script>
       function requisitarPagina(url) {
+        //incluir gif de loading na página
+        if (!document.getElementById("loading")) {
+          //se não haver uma imagem 'loading', incluir
+          let imgLoading = document.createElement("img");
+          imgLoading.id = "loading";
+          imgLoading.src = "loading.gif";
+          imgLoading.className = "rounded mx-auto d-block";
+
+          document.getElementById("conteudo").appendChild(imgLoading); //incluindo elemento criado acima na div que contem o conteúdo pelo ID
+        }
         let ajax = new XMLHttpRequest();
 
         //requisição não iniciada, state = 0
-        console.log(ajax.readyState);
+        //console.log(ajax.readyState);
 
         ajax.open("GET", url);
         //responsável por configurar url requisitada, podemos configurar também, método utilizado nesse processo
 
         //conexão estabelecida com servidor, state = 1
-        console.log(ajax.readyState);
+        //console.log(ajax.readyState);
 
         //lógica que olhe progresso da requisição
         ajax.onreadystatechange = () => {
-          console.log(ajax.readyState);
+          if (ajax.readyState == 4) {
+            console.log("requisição finalizada com sucesso!");
+            document.getElementById("loading").remove(); //removendo imagem quando requisição termina de ser executada
+          }
         }; //executada pelo próprio ajax
 
         ajax.send();
@@ -53,7 +66,7 @@
           <a
             href="#"
             class="btn btn-primary"
-            onclick="requisitarPagina('pagina_1_conteudo.html')"
+            onclick="requisitarPagina('pagina_1_conteudo.php')"
             >Página 1</a
           >
           <a
@@ -75,7 +88,7 @@
       <div class="row">
         <div class="col-md-1"></div>
 
-        <div class="col-md-10"></div>
+        <div class="col-md-10" id="conteudo"></div>
 
         <div class="col-md-1"></div>
       </div>
