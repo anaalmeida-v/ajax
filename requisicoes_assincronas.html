@@ -14,6 +14,7 @@
     />
     <script>
       function requisitarPagina(url) {
+        document.getElementById("conteudo").innerHTML = "";
         //incluir gif de loading na página
         if (!document.getElementById("loading")) {
           //se não haver uma imagem 'loading', incluir
@@ -37,9 +38,15 @@
 
         //lógica que olhe progresso da requisição
         ajax.onreadystatechange = () => {
-          if (ajax.readyState == 4) {
-            console.log("requisição finalizada com sucesso!");
-            document.getElementById("loading").remove(); //removendo imagem quando requisição termina de ser executada
+          if (ajax.readyState == 4 && ajax.status == 200) {
+            document.getElementById("conteudo").innerHTML =
+              "requisição finalizada com sucesso, o status é 200";
+            //document.getElementById("loading").remove(); //removendo imagem quando requisição termina de ser executada
+          }
+          if (ajax.readyState == 4 && ajax.status == 404) {
+            document.getElementById("conteudo").innerHTML =
+              "requisição finalizada, porém o recurso solicitado não foi encontrado, o status é 404";
+            // document.getElementById("loading").remove(); //removendo imagem quando requisição termina de ser executada
           }
         }; //executada pelo próprio ajax
 
