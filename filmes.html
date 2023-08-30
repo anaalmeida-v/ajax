@@ -27,7 +27,47 @@
             domFilmes = parser.parseFromString(XMLFilmes, "text/xml"); //método espera - string que será feita o parse + notação utilizada para a composição dessa string
             //transformando em objeto DOM
 
-            jsonFilmes = xmlToJson(domFilmes)//transformando em obj json
+            jsonFilmes = xmlToJson(domFilmes); //transformando em obj json
+
+            for (let i in jsonFilmes["filmes"]["filme"]) {
+              item = jsonFilmes["filmes"]["filme"][i]
+              let divRow = document.createElement("div");
+              divRow.className = "row";
+
+              let divCol = document.createElement("div");
+              divCol.className = "col";
+
+              let p1 = document.createElement("p");
+              p1.innerHTML =
+                "<strong>Título: </strong>Título do filme" +
+                ["titulo"];
+              let p2 = document.createElement("p");
+              p2.innerHTML =
+                "<strong>Resumo: </strong>Resumo do filme" +
+                jsonFilmes["filmes"]["filme"][i]["titulo"];
+              let p3 = document.createElement("p");
+              p3.innerHTML =
+                "<strong>Gênero: </strong>Gênero do filme" +
+                jsonFilmes["filmes"]["filme"][i]["titulo"];
+              let p4 = document.createElement("p");
+              p4.innerHTML =
+                "<strong>Elenco: </strong>Elenco do filme" +
+                jsonFilmes["filmes"]["filme"][i]["titulo"];
+              let p5 = document.createElement("p");
+              p5.innerHTML =
+                "<strong>Data de lançamento: </strong>Data de lançamento do filme";
+
+              let hr = document.createElement("hr");
+
+              divRow.appendChild(divCol);
+              divCol.appendChild(p1);
+              divCol.appendChild(p2);
+              divCol.appendChild(p3);
+              divCol.appendChild(p4);
+              divCol.appendChild(p5);
+              divCol.appendChild(hr);
+              document.getElementById("lista").appendChild(divRow);
+            }
           }
           if (XMLHttp.readyState == 4 && XMLHttp.status == 404) {
           }
@@ -45,8 +85,8 @@
         </div>
       </div>
     </nav>
-    <div class="container">
-      <div class="row">
+    <div class="container" id="lista">
+      <div class="row mb-5">
         <div class="col">
           <button type="button" class="btn btn-success" onclick="getFilmes()">
             Listar filmes
