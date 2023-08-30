@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script>
+      function getFilmes() {
+        let XMLHttp = new XMLHttpRequesT(); //instancia atribuída a variável
+        XMLHttp.open("GET", "http://localhost/ajax/filmes.xml"); //método e recurso a ser recuperado através do get(url)
+
+        XMLHttp.onreadystatechange = () => {
+          //controla estados da requisição
+          if (XMLHttp.readyState == 4 && XMLHttp.status == 200) {
+            //se estado da req é igual a 4(realizada com sucesso) e se status é igual a 200(OK)
+            let XMLFilmes = XMLHttp.responseText; //retorno para requisição que foi feita em filmes.xml
+          }
+          if (XMLHttp.readyState == 4 && XMLHttp.status == 404) {
+          }
+        };
+
+        XMLHttp.send(); //dispara request
+      }
+    </script>
+    <title>Catálogo de filmes</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-light bg-light mb-4">
+      <div class="container">
+        <div class="navbar-brand mb-0 h1">
+          <h3>Catálogo de filmes</h3>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <button type="button" class="btn btn-success" onclick="getFilmes()">
+            Listar filmes
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
