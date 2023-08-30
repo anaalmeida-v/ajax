@@ -39,13 +39,12 @@
         //lógica que olhe progresso da requisição
         ajax.onreadystatechange = () => {
           if (ajax.readyState == 4 && ajax.status == 200) {
-            document.getElementById("conteudo").innerHTML =
-              "requisição finalizada com sucesso, o status é 200";
+            document.getElementById("conteudo").innerHTML = ajax.responseText;
             //document.getElementById("loading").remove(); //removendo imagem quando requisição termina de ser executada
           }
           if (ajax.readyState == 4 && ajax.status == 404) {
             document.getElementById("conteudo").innerHTML =
-              "requisição finalizada, porém o recurso solicitado não foi encontrado, o status é 404";
+              "..tente novamente mais tarde";
             // document.getElementById("loading").remove(); //removendo imagem quando requisição termina de ser executada
           }
         }; //executada pelo próprio ajax
