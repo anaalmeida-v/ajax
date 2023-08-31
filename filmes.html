@@ -14,14 +14,14 @@
     </script>
     <script>
       function getFilmes() {
-        let XMLHttp = new XMLHttpRequest(); //instancia atribuída a variável
-        XMLHttp.open("GET", "http://localhost/ajax/filmes.xml"); //método e recurso a ser recuperado através do get(url)
+        let xmlHttp = new XMLHttpRequest(); //instancia atribuída a variável
+        xmlHttp.open("GET", "http://localhost/ajax/filmes.xml"); //método e recurso a ser recuperado através do get(url)
 
-        XMLHttp.onreadystatechange = () => {
+        xmlHttp.onreadystatechange = () => {
           //controla estados da requisição
-          if (XMLHttp.readyState == 4 && XMLHttp.status == 200) {
+          if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             //se estado da req é igual a 4(realizada com sucesso) e se status é igual a 200(OK)
-            let XMLFilmes = XMLHttp.responseText; //retorno para requisição que foi feita em filmes.xml
+            let XMLFilmes = xmlHttp.responseText; //retorno para requisição que foi feita em filmes.xml
             let parser = new DOMParser();
 
             domFilmes = parser.parseFromString(XMLFilmes, "text/xml"); //método espera - string que será feita o parse + notação utilizada para a composição dessa string
@@ -30,49 +30,69 @@
             jsonFilmes = xmlToJson(domFilmes); //transformando em obj json
 
             for (let i in jsonFilmes["filmes"]["filme"]) {
-              item = jsonFilmes["filmes"]["filme"][i]
+              let item = jsonFilmes["filmes"]["filme"][i]; //i --- acessar índice do filme //// acessando nível de herança necessária para acessar elemento
+
               let divRow = document.createElement("div");
               divRow.className = "row";
 
               let divCol = document.createElement("div");
               divCol.className = "col";
 
+              ////////////////////////////////////
               let p1 = document.createElement("p");
               p1.innerHTML =
-                "<strong>Título: </strong>Título do filme" +
-                ["titulo"];
+                "<strong>Título: </strong> " + item["titulo"]["#text"];
               let p2 = document.createElement("p");
               p2.innerHTML =
-                "<strong>Resumo: </strong>Resumo do filme" +
-                jsonFilmes["filmes"]["filme"][i]["titulo"];
+                "<strong>Resumo: </strong> " + item["resumo"]["#text"];
+
+              let genero = ""; //texto em branco
+              for (let g in item.genero) {
+                //genero é array, aqui, estamos acessando cada um dos elementos desse array
+                if (genero) genero += ", "; //ajustando exibição dos generos
+                genero += item.genero[g]["#text"];
+              }
+
               let p3 = document.createElement("p");
-              p3.innerHTML =
-                "<strong>Gênero: </strong>Gênero do filme" +
-                jsonFilmes["filmes"]["filme"][i]["titulo"];
+              p3.innerHTML = "<strong>Gênero: </strong> " + genero;
+
+              let elenco = ""; //texto em branco
+              for (let e in item.elenco.ator) {
+                //genero é array, aqui, estamos acessando cada um dos elementos desse array
+                if (elenco) {
+                  elenco += ", ";
+                } //ajustando exibição dos generos
+                 elenco += item.elenco.ator[e]["#text"]; //subindo mais um nível de hierarquia para elenco retornar única pessoa
+              }
+
               let p4 = document.createElement("p");
-              p4.innerHTML =
-                "<strong>Elenco: </strong>Elenco do filme" +
-                jsonFilmes["filmes"]["filme"][i]["titulo"];
+              p4.innerHTML = "<strong>Elenco: </strong> " + elenco;
+
               let p5 = document.createElement("p");
               p5.innerHTML =
-                "<strong>Data de lançamento: </strong>Data de lançamento do filme";
+                "<strong>Data de lançamento: </strong> " +
+                item.dataLancamento["#text"] +
+                "(" +
+                item.dataLancamento["@attributes"]["pais"] +
+                ")";
 
-              let hr = document.createElement("hr");
+              let hr = document.createElement("hr"); //adicionando elemento hr
 
-              divRow.appendChild(divCol);
+              //criando estrutura com elementos
+              divRow.appendChild(divCol); //colocando divCol dentro da divRow
               divCol.appendChild(p1);
               divCol.appendChild(p2);
               divCol.appendChild(p3);
               divCol.appendChild(p4);
               divCol.appendChild(p5);
-              divCol.appendChild(hr);
-              document.getElementById("lista").appendChild(divRow);
+              divCol.appendChild(hr); //adicionando elementos dentro de divCol
+              document.getElementById("lista").appendChild(divRow); //adicionando div que contém todo o conteúdo ao DOM pelo ID
             }
           }
-          if (XMLHttp.readyState == 4 && XMLHttp.status == 404) {
+          if (xmlHttp.readyState == 4 && xmlHttp.status == 404) {
           }
         };
-        XMLHttp.send(); //dispara request
+        xmlHttp.send(); //dispara request
       }
     </script>
     <title>Catálogo de filmes</title>
